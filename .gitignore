@@ -53,3 +53,25 @@ dkms.conf
 
 # debug information files
 *.dwo
+
+# 개인 설정 및 캐시 폴더
+.vs/
+
+# MSBuild 및 빌드 결과물 폴더
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Bb]in/
+[Oo]bj/
+
+# Visual Studio 새로운 솔루션 탐색기 캐시
+.vshistory/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# 컴파일러 진단 및 백업 파일
+*.VC.db
+*.VC.opendb
