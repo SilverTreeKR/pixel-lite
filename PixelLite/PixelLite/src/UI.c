@@ -3,6 +3,9 @@
 #include <conio.h>
 
 #define MENU_SIZE 7
+#define UP 1
+#define DOWN 2
+#define ENTER 3
 
 char* menu[MENU_SIZE] = {
     "사진 선택",
@@ -38,3 +41,30 @@ void displayMenu(int select) {
     printf("=== 메뉴 선택 ===\n\n");
 
 }
+
+int keyControl()
+{
+    int key = getch();
+
+    if (key == 224)
+    {
+        key = getch();
+
+        switch (key)
+        {
+        case 72:
+            return UP;
+
+        case 80:
+            return DOWN;
+        }
+    }
+
+    else if (key == 13)
+    {
+        return ENTER;
+    }
+
+    return 0;
+}
+
