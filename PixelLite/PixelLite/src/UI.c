@@ -101,8 +101,8 @@ int main()
             if (select == 6)
             {
                 printf("\n아무 키나 누르면 종료됩니다.\n");
-                return 0;
                 _getch();
+                return 0;
             }
 
             printf("\n아무 키나 누르면 메뉴로 돌아갑니다...");
