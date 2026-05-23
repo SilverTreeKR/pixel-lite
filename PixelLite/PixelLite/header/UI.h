@@ -8,6 +8,7 @@
 extern char* menu[MENU_SIZE];
 
 void displayMenu(int select);
+void textcolor(int colorNum);
 
 int getKey();
 #endif // !UI_H
