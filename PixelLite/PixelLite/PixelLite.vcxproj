@@ -21,7 +21,7 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>18.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{8e9cfbad-0602-4093-8846-9173f1d76db2}</ProjectGuid>
+    <ProjectGuid>{73B5A141-AD92-47F5-D914-941863ED2143}</ProjectGuid>
     <RootNamespace>PixelLite</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
