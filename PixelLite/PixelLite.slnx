@@ -3,5 +3,5 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="PixelLite/PixelLite.vcxproj" />
+  <Project Path="PixelLite/PixelLite.vcxproj" Id="8e9cfbad-0602-4093-8846-9173f1d76db2" />
 </Solution>
