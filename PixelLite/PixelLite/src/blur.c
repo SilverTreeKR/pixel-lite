@@ -51,7 +51,7 @@ static void blurVertical(Pixel** src, Pixel** dst, int width, int height, int ra
 
 void applyBlur(Pixel** pixels, int width, int height) {
     int row, i;
-    int radius = 10;
+    int radius = 50;
     Pixel** temp = NULL;
 
     if (pixels == NULL) {
