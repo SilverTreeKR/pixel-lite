@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include "../header/CLI.h"
 
 #define MAX_COMMANDS 20
 #define MAX_INPUT 100
@@ -75,4 +76,42 @@ void executeCommand(char* name, char* args)
     }
 
     printf("명령 없음\n");
+}
+
+// =========================
+// CLI 루프
+// =========================
+
+void runCLI(void)
+{
+    char input[MAX_INPUT];
+    char cmd[20];
+    char args[80];
+
+    printf("CLI 프로그램 (exit 입력 시 종료)\n");
+
+    while (1)
+    {
+        printf(">> ");
+
+        fgets(input, sizeof(input), stdin);
+
+        input[strcspn(input, "\n")] = '\0';
+
+        cmd[0] = '\0';
+        args[0] = '\0';
+
+        sscanf(input, "%s %[^\n]", cmd, args);
+
+        if (strcmp(cmd, "exit") == 0)
+        {
+            printf("종료합니다.\n");
+            break;
+        }
+
+        if (strlen(cmd) == 0)
+            continue;
+
+        executeCommand(cmd, args);
+    }
 }
