@@ -5,15 +5,18 @@
 
 int main()
 {
+    // UI 메뉴 선택창
     int select = 0;
     int key;
 
     while (1)
     {
+        // select 값에 따라 메뉴 출력
         displayMenu(select);
 
         key = getKey();
 
+        // 키 입력 가져오는 부분
         switch (key)
         {
         case UP:
@@ -34,6 +37,7 @@ int main()
             system("cls");
             printf("선택한 메뉴: %s\n", menu[select]);
 
+            // 종료 메뉴 선택
             if (select == 7)
             {
                 printf("\n아무 키나 누르면 종료됩니다.\n");
