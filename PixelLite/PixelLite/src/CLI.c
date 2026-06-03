@@ -30,3 +30,14 @@ void registerCommand(char* name, CommandFunc func)
     registry[count].func = func;
     count++;
 }
+
+void registerAll(Command commands[], int n)
+{
+    for (int i = 0; i < n; i++)
+    {
+        registerCommand(
+            commands[i].name,
+            commands[i].func
+        );
+    }
+}
