@@ -63,8 +63,6 @@ void runCLI(void)
     char cmd[20];
     char args[80];
 
-    printf("CLI 프로그램 (exit 입력 시 종료)\n");
-
     while (1)
     {
         printf("> ");
@@ -84,7 +82,6 @@ void runCLI(void)
         // exit 명령어 입력 시 종료
         if (strcmp(cmd, "exit") == 0)
         {
-            printf("종료합니다.\n");
             break;
         }
 

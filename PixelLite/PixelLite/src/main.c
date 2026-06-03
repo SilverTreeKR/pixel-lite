@@ -56,6 +56,7 @@ int main()
                 registerAll(commands, n);
 
 				// CLI 실행
+                system("cls");
                 runCLI();
 			}
             
