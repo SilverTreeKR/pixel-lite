@@ -58,3 +58,21 @@ void removeQuotes(char* str)
         str[len - 2] = '\0';
     }
 }
+
+// =========================
+// 명령 실행
+// =========================
+
+void executeCommand(char* name, char* args)
+{
+    for (int i = 0; i < count; i++)
+    {
+        if (strcmp(registry[i].name, name) == 0)
+        {
+            registry[i].func(args);
+            return;
+        }
+    }
+
+    printf("명령 없음\n");
+}
