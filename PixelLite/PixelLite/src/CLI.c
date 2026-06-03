@@ -41,3 +41,20 @@ void registerAll(Command commands[], int n)
         );
     }
 }
+
+// =========================
+// 유틸 함수
+// =========================
+
+void removeQuotes(char* str)
+{
+    int len = strlen(str);
+
+    if (len >= 2 &&
+        str[0] == '"' &&
+        str[len - 1] == '"')
+    {
+        memmove(str, str + 1, len - 2);
+        str[len - 2] = '\0';
+    }
+}
