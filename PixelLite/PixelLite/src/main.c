@@ -4,6 +4,7 @@
 
 #include "../header/UI.h"
 #include "../header/CLI.h"
+#include "../header/Command.h"
 
 int main()
 {
@@ -45,7 +46,7 @@ int main()
 			{
                 // 커맨드 목록 정의
                 Command commands[] = {
-                    {}
+                    {"add", cmd_add}
                 };
 
                 // 배열 개수 계산
