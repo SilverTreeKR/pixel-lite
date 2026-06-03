@@ -92,17 +92,21 @@ void runCLI(void)
 
     while (1)
     {
-        printf(">> ");
+        printf("> ");
 
         fgets(input, sizeof(input), stdin);
 
+		// 개행 문자 제거
         input[strcspn(input, "\n")] = '\0';
 
+        // 초기화
         cmd[0] = '\0';
         args[0] = '\0';
 
+        // 명령 + 인자 분리(파싱)
         sscanf(input, "%s %[^\n]", cmd, args);
 
+        // exit 명령어 입력 시 종료
         if (strcmp(cmd, "exit") == 0)
         {
             printf("종료합니다.\n");
