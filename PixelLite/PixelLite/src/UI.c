@@ -3,7 +3,6 @@
 #include <conio.h>
 #include "../header/UI.h"
 
-// MENU_SIZE는 UI.h에서 정의되어있음.
 char* menu[MENU_SIZE] = {
     "사진 선택",
     "크로마키",
