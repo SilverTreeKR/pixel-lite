@@ -159,6 +159,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="header\CLI.h" />
+    <ClInclude Include="header\Command.h" />
     <ClInclude Include="header\UI.h" />
     <ClCompile Include="src\CLI.c" />
   </ItemGroup>
