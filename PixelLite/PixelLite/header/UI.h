@@ -1,6 +1,6 @@
 #ifndef UI_H
 #define UI_H
-#define MENU_SIZE 8
+#define MENU_SIZE 9
 #define UP 1
 #define DOWN 2
 #define ENTER 3
