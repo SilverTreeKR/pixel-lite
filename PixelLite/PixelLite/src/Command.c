@@ -58,3 +58,21 @@ void cmd_setResult(char* args)
 	setResultPath(args); // FileCore의 resultPath에 저장
     printf("결과물 폴더 설정 완료: %s\n", args);
 }
+
+// info — 현재 설정된 경로 출력
+void cmd_info(char* args)
+{
+    printf("===== 현재 경로 정보 =====\n");
+
+    if (isImagePathSet())
+        printf("이미지  경로: %s\n", getImagePath());
+    else
+        printf("이미지  경로: (설정 안 됨)\n");
+
+    if (isResultPathSet())
+        printf("결과물 폴더: %s\n", getResultPath());
+    else
+        printf("결과물 폴더: (설정 안 됨)\n");
+
+    printf("==========================\n");
+}
