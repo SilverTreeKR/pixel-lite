@@ -63,7 +63,7 @@ const char* getResultPath(void)
 // 비고: Windows API 사용하여 파일 탐색기 띄우고, 선택된 파일 경로 → imagePath 저장
 //      일부 AI 활용, 오류 발생 가능성 있으므로 QA 진행 시 확인 부탁드립니다.
 // ================================================
-
+// PS. 일단 나는 컴파일 하기 전에 기도를 먼저 드리곤 해. 예수든 알라든 뭐든간에. 2026-06-06 태웅
 
 // 파일 선택 다이얼로그 열고 → imagePath 저장
 int openImageDialog(void)
@@ -111,7 +111,7 @@ int openImageDialog(void)
 // 비고: Windows API 사용하여 파일 탐색기 띄우고, 선택된 폴더 경로 → resultPath 저장
 //      일부 AI 활용, 오류 발생 가능성 있으므로 QA 진행 시 확인 부탁드립니다.
 // ================================================
-
+// PS. 오류나면 나도 이젠 모르겠다. 씨부럴거. 2026-06-06 태웅
 
 int openFolderDialog(void)
 {
@@ -157,4 +157,38 @@ int openFolderDialog(void)
 
     printf("폴더 선택 취소됨.\n");
     return 0;  // 사용자가 취소했거나 오류 발생
+}
+
+// ================================================
+// 유틸리티
+// ================================================
+
+// 이미지 경로가 설정되었는지 확인
+int isImagePathSet(void)
+{
+	return strlen(instance.imagePath) > 0; // imagePath가 빈 문자열이 아니면 설정된 것으로 간주
+}
+
+// 결과물 경로가 설정되었는지 확인
+int isResultPathSet(void)
+{
+	return strlen(instance.resultPath) > 0; // resultPath가 빈 문자열이 아니면 설정된 것으로 간주
+}
+
+// 이미지 경로에서 파일명만 추출
+// 예) "C:\photos\input.png" → "input.png"
+const char* getImageFileName(void)
+{
+    const char* path = instance.imagePath; // imagePath 에서 경로 가져오시고
+	const char* lastSlash = strrchr(path, '\\'); // '\\' 문자가 마지막으로 나타나는 위치 찾기
+
+	if (lastSlash != NULL)  // '\\'가 존재하는 경우
+		return lastSlash + 1; // '\\' 다음 위치가 파일명 시작이므로 반환
+
+    // '\\' 없으면 '/' 시도 (유닉스 스타일)
+	lastSlash = strrchr(path, '/'); // '/' 문자가 마지막으로 나타나는 위치 찾기
+    if (lastSlash != NULL)
+        return lastSlash + 1;
+
+    return path; // 파일명만 있을 경우 그냥 반환
 }
