@@ -1,7 +1,7 @@
 #ifndef FILECORE_H
 #define FILECORE_H
 
-#define MAX_PATH_LEN 512
+#define MAX_PATH_LEN 512 // 최대 경로의 길이
 
 typedef struct {
     char imagePath[MAX_PATH_LEN];   // 입력 이미지 전체 경로 (파일명 포함)
