@@ -145,10 +145,6 @@ int openFolderDialog(void)
 			folderPath[len] = '\\'; // '\\' 추가
 			folderPath[len + 1] = '\0'; // 문자열 종료 문자 추가
 		}
-        {
-			folderPath[len] = '\\'; // '\\' 추가
-			folderPath[len + 1] = '\0'; // 문자열 종료 문자 추가
-        }
 
 		setResultPath(folderPath); // FileCore의 resultPath에 선택된 폴더 경로 저장
         printf("결과물 폴더 설정: %s\n", folderPath); // 선택 경로 출력
