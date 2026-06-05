@@ -85,6 +85,7 @@ int openImageDialog(void)
 		"모든 파일\0*.*\0"; // 모든 파일 표시
 	ofn.nFilterIndex = 1; // 기본 필터 인덱스 (1부터 시작)
     ofn.lpstrTitle = "이미지 파일 선택"; // 파일 탐색기 타이틀
+    
     // 옵션 설정하는 부분
     // ======================================================
 	// OFN_FILEMUSTEXIST: 존재하는 파일만 선택 가능
@@ -101,5 +102,59 @@ int openImageDialog(void)
     }
 
     printf("이미지 선택 취소됨.\n"); // 선택 취소 시 메시지 출력
+    return 0;  // 사용자가 취소했거나 오류 발생
+}
+
+// ================================================
+// 파일 탐색기 - 결과물 폴더 선택 (SHBrowseForFolder)
+// ================================================
+// 비고: Windows API 사용하여 파일 탐색기 띄우고, 선택된 폴더 경로 → resultPath 저장
+//      일부 AI 활용, 오류 발생 가능성 있으므로 QA 진행 시 확인 부탁드립니다.
+// ================================================
+
+
+int openFolderDialog(void)
+{
+	BROWSEINFO bi; // 폴더 선택 다이얼로그 구조체
+	char folderPath[MAX_PATH_LEN] = ""; // 선택된 폴더 경로 저장 버퍼
+    LPITEMIDLIST pidl; // 선택된 폴더의 ITEM ID LIST 저장 포인터
+
+    ZeroMemory(&bi, sizeof(bi)); // 구조체 초기화
+
+	bi.hwndOwner = NULL; // 소유자 윈도우 핸들 (NULL이면 현재 활성 윈도우)
+	bi.lpszTitle = "결과물을 저장할 폴더 선택"; // 폴더 탐색기 타이틀
+   
+    // 폴더 선택 옵션 설정
+	// ======================================================
+	// BIF_RETURNONLYFSDIRS: 파일 시스템 디렉터리만 반환
+	// BIF_NEWDIALOGSTYLE: 새로운 스타일의 다이얼로그 사용
+	// ======================================================
+    bi.ulFlags = BIF_RETURNONLYFSDIRS | BIF_NEWDIALOGSTYLE; 
+
+    pidl = SHBrowseForFolder(&bi); // 폴더 탐색기 열기
+
+    if (pidl != NULL) // 사용자가 폴더를 선택한 경우
+    {
+		SHGetPathFromIDList(pidl, folderPath); // pidl에서 실제 폴더 경로를 folderPath 버퍼로 변환
+		CoTaskMemFree(pidl); // pidl 메모리 해제
+
+        // 끝에 '\\' 없으면 추가
+		int len = strlen(folderPath); // 폴더 경로 길이 계산
+		if (len > 0 && folderPath[len - 1] != '\\') // 마지막 문자가 '\\'가 아닌 경우
+		{
+			folderPath[len] = '\\'; // '\\' 추가
+			folderPath[len + 1] = '\0'; // 문자열 종료 문자 추가
+		}
+        {
+			folderPath[len] = '\\'; // '\\' 추가
+			folderPath[len + 1] = '\0'; // 문자열 종료 문자 추가
+        }
+
+		setResultPath(folderPath); // FileCore의 resultPath에 선택된 폴더 경로 저장
+        printf("결과물 폴더 설정: %s\n", folderPath); // 선택 경로 출력
+        return 1;  // 성공
+    }
+
+    printf("폴더 선택 취소됨.\n");
     return 0;  // 사용자가 취소했거나 오류 발생
 }
