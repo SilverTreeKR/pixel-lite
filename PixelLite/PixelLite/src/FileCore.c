@@ -192,3 +192,20 @@ const char* getImageFileName(void)
 
     return path; // 파일명만 있을 경우 그냥 반환
 }
+// 결과물 전체 경로 생성
+// 예) resultPath="C:\out\", prefix="bw_", 
+//     imagePath="C:\in\cat.png"
+//   → dest= "C:\out\bw_cat.png"
+
+void buildResultFilePath(char* dest, const char* prefix) // dest: 결과물 전체 경로 저장 버퍼, prefix: 접두사
+{
+    const char* fileName = getImageFileName(); // 
+
+    // dest 버퍼에 resultPath + prefix + fileName 형식으로 결과물 경로 생성\
+    // snprintf(버퍼, 버퍼크리, 문자열, 값)
+	snprintf(dest, MAX_PATH_LEN, "%s%s%s", 
+        instance.resultPath,
+        prefix,
+        fileName
+    );
+}
