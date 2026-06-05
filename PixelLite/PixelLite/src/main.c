@@ -5,6 +5,7 @@
 #include "../header/UI.h"
 #include "../header/CLI.h"
 #include "../header/Command.h"
+#include "../header/FileCore.h"
 
 int main()
 {
@@ -39,14 +40,37 @@ int main()
             break;
 
         case ENTER:
+
             // =========================
-			// CLI 메뉴 선택
+            // 0. 사진 선택 -> 파일 탐색기 열어서 이미지 선택
             // =========================
-			if (select == 6)
+            if (select == 0)
+            {
+                openImageDialog();
+                printf("\n아무 키나 누르면 메뉴로 돌아갑니다...");
+                _getch();
+                break;
+            }
+            // =========================
+            // 1. 결과물 경로 -> 파일 탐색기 열어서 폴더 선택
+            // =========================
+            if (select == 1)
+            {
+                openFolderDialog();
+                printf("\n아무 키나 누르면 메뉴로 돌아갑니다...");
+                _getch();
+                break;
+            }
+            // =========================
+			// 7. CLI 메뉴 선택 -> runCLI()
+            // =========================
+			if (select == 7)
 			{
                 // 커맨드 목록 정의
                 Command commands[] = {
-                    {"add", cmd_add}
+                    {"setImage", cmd_setImage},
+                    {"setResult", cmd_setResult},
+                    {"info", cmd_info}
                 };
 
                 // 배열 개수 계산
@@ -61,9 +85,9 @@ int main()
 			}
             
             // =========================
-            // 종료 메뉴 선택
+			// 8. 종료 메뉴 선택 -> 프로그램 종료
             // =========================
-            if (select == 7)
+            if (select == 8)
             {
                 printf("\n아무 키나 누르면 종료됩니다.\n");
                 return 0;

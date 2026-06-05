@@ -3,10 +3,9 @@
 
 #include "CLI.h"
 
-// 명령 함수들
-
-void cmd_add(char* args);
-void cmd_path(char* args);
-void cmd_help(char* args);
+// FileCore 명령
+void cmd_setImage(char* args);   // setImage "경로"
+void cmd_setResult(char* args);  // setResult "경로"
+void cmd_info(char* args);       // info - 현재 경로 출력
 
 #endif
