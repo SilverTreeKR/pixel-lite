@@ -16,16 +16,3 @@ static void removeQuotes(char* str)
         str[len - 2] = '\0';
     }
 }
-
-void cmd_add(char* args)
-{
-    int a, b;
-
-    if (sscanf(args, "%d %d", &a, &b) != 2)
-    {
-        printf("사용법: add 숫자 숫자\n");
-        return;
-    }
-
-    printf("결과: %d\n", a + b);
-}
