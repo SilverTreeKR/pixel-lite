@@ -261,7 +261,10 @@ static Image* allocImage(int width, int height, int channels)
     return img;
 }
 
-// 이미지에 2x2 블러 효과를 적용하는 함수
+// 이미지에 10x10 (커널 크기) 블러 효과를 적용하는 함수
+// 즉, 현재 픽셀의 주변 +-5 범위에 있는 픽셀들의 값을 평균내어 현재 픽셀의 새로운 값으로 적용
+// -> 이미지가 흐려보임.
+#define BLUR_KERNEL 10 // 커널 크기 정의
 Image* applyBlur(Image* src)
 {
 	// 입력 이미지가 NULL인 경우
@@ -277,6 +280,10 @@ Image* applyBlur(Image* src)
     int w = src->width;
     int h = src->height;
     int c = src->channels;
+
+    // 커널의 절반 크기 계싼
+    // 10x10 커널 -> 반경 5
+    int half = BLUR_KERNEL / 2;
 
     // 모든 행(높이) 순회
     for (int y = 0; y < h; y++)
@@ -301,29 +308,24 @@ Image* applyBlur(Image* src)
                 // 실제 더해진 픽셀 개수
                 int count = 0;
 
-				// 사용한 커널의 크기는 2x2이므로,
-				// 현재 픽셀의 오른쪽 (x+1)과 아래쪽 (y+1) 픽셀까지 포함하여 총 4개의 픽셀을 참조
                 // 아래는 이를 위한 알고리즘
-                for (int ky = 0; ky < 2; ky++)
+                for (int ky = -half; ky < half; ky++)
                 {
-                    for (int kx = 0; kx < 2; kx++)
+                    for (int kx = -half; kx < half; kx++)
                     {
-                        // 이웃 픽셀 좌표 계산
                         int nx = x + kx;
                         int ny = y + ky;
 
-                        // 이미지 범위 안에 있는 경우만 처리
-                        if (nx < w && ny < h)
+                        // 경계 처리: 이미지 범위 내에서만
+                        if (nx >= 0 && nx < w && ny >= 0 && ny < h)
                         {
-                            // 픽셀 값 누적
                             sum += src->data[(ny * w + nx) * c + ch];
-                            // 사용한 픽셀 개수 증가
                             count++;
                         }
                     }
                 }
 
-                // 평균 값 곘나 후 결과 이미지에 저장
+                // 평균 값 계산 후 결과 이미지에 저장
                 dst->data[(y * w + x) * c + ch] =
                     (unsigned char)(sum / count);
             }
