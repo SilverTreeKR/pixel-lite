@@ -481,3 +481,44 @@ Image* applyChromaKey(Image* src, int threshold)
     printf("크로마키 처리 완료 (threshold: %d)\n", threshold);
     return dst;
 }
+
+// 색상 반전 (255 - 각 채널 값)
+Image* applyInvert(Image* src)
+{
+	// 입력 이미지가 NULL인 경우
+    if (src == NULL) return NULL;
+
+	// 결과 이미지를 저장할 새로운 Image 구조체 생성
+    Image* dst = allocImage(src->width, src->height, src->channels);
+
+	// 생성 실패 시 NULL 반환
+    if (dst == NULL) return NULL;
+
+	// 이미지 크기 및 채널 수 저장
+    int w = src->width;
+    int h = src->height;
+    int c = src->channels;
+
+	// 모든 행(높이) 순회
+    for (int y = 0; y < h; y++)
+    {
+		// 모든 열(너비) 순회
+        for (int x = 0; x < w; x++)
+        {
+			// 현재 픽셀의 시작 인덱스를 계산
+            int idx = (y * w + x) * c;
+
+			// 각 채널 값 반전 (255 - 원본 값)
+            dst->data[idx + 0] = 255 - src->data[idx + 0]; // R
+            dst->data[idx + 1] = 255 - src->data[idx + 1]; // G
+            dst->data[idx + 2] = 255 - src->data[idx + 2]; // B
+
+            // 알파 채널 유지
+            if (c == 4)
+                dst->data[idx + 3] = src->data[idx + 3];
+        }
+    }
+
+    printf("색상 반전 완료\n");
+    return dst;
+}
