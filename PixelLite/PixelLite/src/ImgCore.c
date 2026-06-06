@@ -219,3 +219,18 @@ int saveImage(Image* img, const char* prefix)
 	// 성공 여부 반환
     return success;
 }
+
+
+// Image 구조체의 메모리를 해제하는 함수
+// 메모리 누수 방지
+void freeImage(Image* img)
+{
+	// NULL 체크 (이미 해제되었거나 잘못된 포인터일 수 있음)
+    if (img == NULL) return;
+
+	// 이미지 데이터가 존재할 경우 메모리 해제
+	// stbi_image_free는 stb_image로 로드된 이미지 데이터를 해제하는 함수
+    if (img->data != NULL)
+        stbi_image_free(img->data);
+    free(img);
+}
