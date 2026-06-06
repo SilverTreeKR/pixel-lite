@@ -16,3 +16,14 @@
 
 #include "../header/ImgCore.h"
 #include "../header/FileCore.h"
+
+// RGB 값을 강제로 0~255 범위로 맞추는 함수
+// EX) clamp(300) → 255, clamp(-20) → 0
+// 0~255 범위를 벗어날 경우 오류가 발생하기 때문
+int clamp(int value)
+{
+    if (value < 0)   return 0;
+    if (value > 255) return 255;
+    return value;
+}
+
