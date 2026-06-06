@@ -70,3 +70,52 @@ void getExtension(const char* path, char* ext)
     // 문자열 종료 문자 추가
     ext[i] = '\0';
 }
+
+// 이미지를 로드 하여 Image 구조체로 반환하는 함수
+Image* loadImage(void)
+{
+    const char* path = getImagePath(); // 현재 설정된 이미지 경로 가져오기
+
+
+	// 경로기 비어있을 경우  오류 메시지 출력 후 NULL 반환
+    if (strlen(path) == 0)
+    {
+        printf("오류: 이미지 경로가 설정되지 않았습니다.\n");
+        printf("      UI에서 '사진 선택' 또는 CLI에서 setImage \"경로\" 를 사용하세요.\n");
+        return NULL;
+    }
+
+	// Image 구조체를 위한 메모리 할당
+    Image* img = (Image*)malloc(sizeof(Image));
+
+    // 메모리 할당을 실패할 경우
+    if (img == NULL)
+    {
+        printf("오류: 메모리 할당 실패\n");
+        return NULL;
+    }
+
+    // stb_image로 로드 (채널 4로 강제: RGBA)
+    img->data = stbi_load(path,
+        &img->width, // 이미지 너비 저장
+		&img->height, // 이미지 높이 저장
+		&img->channels, // 원본 채널 수 저장
+        4);  // 4 = RGBA로 강제 로드 (크로마키에서 투명도 필요)
+
+	// 이미지 로드 실패 시 오류 메시지 출력 후 메모리 해제 및 NULL 반환
+    if (img->data == NULL)
+    {
+        printf("오류: 이미지 로드 실패 → %s\n", path);
+        printf("      지원 형식: PNG, JPG, JPEG, BMP\n");
+        free(img);
+        return NULL;
+    }
+
+    // 실제 사용 채널 수를 RGBA(4)로 설정 
+    img->channels = 4; 
+    printf("이미지 로드 성공: %s (%dx%d)\n",
+        path, img->width, img->height);
+
+    // 로드된 이미지 반환
+    return img;
+}
