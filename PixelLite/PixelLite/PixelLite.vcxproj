@@ -166,6 +166,7 @@
     <ClInclude Include="header\CLI.h" />
     <ClInclude Include="header\Command.h" />
     <ClInclude Include="header\FileCore.h" />
+    <ClInclude Include="header\ImgCore.h" />
     <ClInclude Include="header\UI.h" />
     <ClCompile Include="src\CLI.c" />
   </ItemGroup>
