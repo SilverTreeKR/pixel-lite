@@ -260,3 +260,80 @@ static Image* allocImage(int width, int height, int channels)
     // 생성된 이미지 반환
     return img;
 }
+
+// 이미지에 2x2 블러 효과를 적용하는 함수
+Image* applyBlur(Image* src)
+{
+	// 입력 이미지가 NULL인 경우
+    if (src == NULL) return NULL;
+
+	// 결과 이미지를 저장할 새로운 Image 구조체 생성
+    Image* dst = allocImage(src->width, src->height, src->channels);
+
+    // 생성 실패 시 NULL 반환
+    if (dst == NULL) return NULL;
+
+    // 이미지 크기 및 채널 수 저장
+    int w = src->width;
+    int h = src->height;
+    int c = src->channels;
+
+    // 모든 행(높이) 순회
+    for (int y = 0; y < h; y++)
+    {
+        // 모든 열(너비) 순회
+        for (int x = 0; x < w; x++)
+        {
+			// 모든 행과 열의 픽셀에 대한 색상 채널 순회
+            for (int ch = 0; ch < c; ch++)
+            {
+                // 알파 채널은 블러 미적용 (그대로 복사)
+                if (ch == 3)
+                {
+                    // 원본 값 복사
+                    dst->data[(y * w + x) * c + ch] =
+                        src->data[(y * w + x) * c + ch];
+                    continue;
+                }
+
+                // 주변 픽셀 값의 합
+                int sum = 0;
+                // 실제 더해진 픽셀 개수
+                int count = 0;
+
+				// 사용한 커널의 크기는 2x2이므로,
+				// 현재 픽셀의 오른쪽 (x+1)과 아래쪽 (y+1) 픽셀까지 포함하여 총 4개의 픽셀을 참조
+                // 아래는 이를 위한 알고리즘
+                for (int ky = 0; ky < 2; ky++)
+                {
+                    for (int kx = 0; kx < 2; kx++)
+                    {
+                        // 이웃 픽셀 좌표 계산
+                        int nx = x + kx;
+                        int ny = y + ky;
+
+                        // 이미지 범위 안에 있는 경우만 처리
+                        if (nx < w && ny < h)
+                        {
+                            // 픽셀 값 누적
+                            sum += src->data[(ny * w + nx) * c + ch];
+                            // 사용한 픽셀 개수 증가
+                            count++;
+                        }
+                    }
+                }
+
+                // 평균 값 곘나 후 결과 이미지에 저장
+                dst->data[(y * w + x) * c + ch] =
+                    (unsigned char)(sum / count);
+            }
+        }
+    }
+
+    printf("블러 처리 완료\n");
+
+    // 결과 이미지 반환
+    return dst;
+}
+
+
