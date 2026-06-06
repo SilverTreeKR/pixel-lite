@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <string.h>
+#include <Windows.h>
+
 #include "../header/CLI.h"
 #include "../header/Command.h"
 
@@ -87,7 +89,7 @@ void runCLI(void)
 
         if (strlen(cmd) == 0)
             continue;
-
+        system("cls");
         executeCommand(cmd, args);
     }
 }
