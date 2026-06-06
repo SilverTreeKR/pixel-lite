@@ -4,6 +4,11 @@
 #include "../header/Command.h"
 #include "../header/CLI.h"
 #include "../header/FileCore.h"
+#include "../header/ImgCore.h"
+
+// ===================================
+// 유틸리티
+// ===================================
 
 static void removeQuotes(char* str)
 {
@@ -17,6 +22,41 @@ static void removeQuotes(char* str)
         str[len - 2] = '\0';
     }
 }
+
+// 이미지 처리 공통 흐름:
+// 로드 → 처리 → 저장 → 해제
+// processAndSave(이미지 처리 함수, 접두사)
+static void processAndSave(Image* (*applyFunc)(Image*), const char* prefix)
+{
+    // 원본 이미지 로드
+    Image* src = loadImage();
+
+    // 없으면 종료
+    if (src == NULL) return;
+
+    // 이미지 처리 함수 실행
+    Image* dst = applyFunc(src);
+   
+    // 처리 실패시
+    // PS. 여기서 오류나면 진짜 모르겠다. 때려치고 싶어질거 같음. 2026-06-06 태웅
+    if (dst == NULL)
+    {
+        printf("오류: 이미지 처리 실패\n");
+        freeImage(src);
+        return;
+    }
+
+    // 처리된 이미지 저장
+    saveImage(dst, prefix);
+
+    // 메모리 해제
+    freeImage(src);
+    freeImage(dst);
+}
+
+// ===================================
+// FileCore.c
+// ===================================
 
 // setImage "경로" — 이미지 경로 직접 지정
 void cmd_setImage(char* args)
