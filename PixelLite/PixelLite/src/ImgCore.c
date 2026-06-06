@@ -234,3 +234,29 @@ void freeImage(Image* img)
         stbi_image_free(img->data);
     free(img);
 }
+
+
+// 새로운 Image 구조체와 픽셀 데이터를 생성하는 함수
+static Image* allocImage(int width, int height, int channels)
+{
+	// Image 구조체를 위한 메모리 할당
+    Image* img = (Image*)malloc(sizeof(Image));
+
+	// 메모리 할당 실패 시 NULL 반환
+    if (img == NULL) return NULL;
+
+	img->width = width; // 이미지 너비 설정
+	img->height = height; // 이미지 높이 설정
+	img->channels = channels; // 이미지 채널 수 설정
+	img->data = (unsigned char*)calloc(width * height * channels, 1); // 픽셀 데이터 메모리 할당 및 0으로 초기화
+
+	// 픽셀 데이터 할당 실패 시 메모리 해제 및 NULL 반환
+    if (img->data == NULL)
+    {
+        free(img);
+        return NULL;
+    }
+
+    // 생성된 이미지 반환
+    return img;
+}
