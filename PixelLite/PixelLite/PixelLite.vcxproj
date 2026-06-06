@@ -149,6 +149,7 @@
   <ItemGroup>
     <ClCompile Include="src\Command.c" />
     <ClCompile Include="src\FileCore.c" />
+    <ClCompile Include="src\ImgCore.c" />
     <ClCompile Include="src\main.c">
       <SDLCheck Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</SDLCheck>
       <SDLCheck Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</SDLCheck>
@@ -169,6 +170,8 @@
     <ClInclude Include="header\ImgCore.h" />
     <ClInclude Include="header\UI.h" />
     <ClCompile Include="src\CLI.c" />
+    <ClInclude Include="lib\stb_image.h" />
+    <ClInclude Include="lib\stb_image_write.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

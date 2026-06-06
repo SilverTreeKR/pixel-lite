@@ -30,6 +30,9 @@
     <ClCompile Include="src\FileCore.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="src\ImgCore.c">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="header\CLI.h">
@@ -45,6 +48,12 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="header\ImgCore.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\stb_image.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\stb_image_write.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
