@@ -393,3 +393,91 @@ Image * applyGrayscale(Image * src)
     // 결과 이미지 반환
     return dst;
 }
+
+// ================================================
+// 크로마키 (초록색 제거)
+// PNG → 알파값 0 (투명)
+// JPG → 흰색 (255, 255, 255)
+// ================================================
+
+Image* applyChromaKey(Image* src, int threshold)
+{
+	// 입력 이미지가 NULL인 경우
+    if (src == NULL) return NULL;
+
+	// 결과 이미지를 저장할 새로운 Image 구조체 생성
+    Image* dst = allocImage(src->width, src->height, src->channels);
+    
+	// 생성 실패 시 NULL 반환
+    if (dst == NULL) return NULL;
+
+
+	// 이미지 크기 및 채널 수 저장
+    int w = src->width;
+    int h = src->height;
+    int c = src->channels;
+
+    // 입력 파일 확장자 확인 (PNG 여부)
+    char ext[16];
+    getExtension(getImagePath(), ext);
+    int isPNG = (strcmp(ext, "png") == 0);
+
+    // 키 컬러: 순수 초록 (0, 255, 0)
+    int keyR = 0, keyG = 255, keyB = 0;
+
+	// 모든 행(높이) 순회
+    for (int y = 0; y < h; y++)
+    {
+		// 모든 열(너비) 순회
+        for (int x = 0; x < w; x++)
+        {
+			// 현재 픽셀의 시작 인덱스를 계산
+            int idx = (y * w + x) * c;
+
+			// 원본 RGB 값 추출
+            unsigned char r = src->data[idx + 0];
+            unsigned char g = src->data[idx + 1];
+            unsigned char b = src->data[idx + 2];
+
+			// 현재 픽셀과 초록색 사이의 거리 계산 (유클리드 거리)
+            double dist = colorDistance(r, g, b, keyR, keyG, keyB);
+
+
+			// 거리가 임계값보다 작은 경우 (초록색과 유사한 경우)
+            if (dist <= threshold)
+            {
+				// PNG 이고 알파 채널이 있는 경우
+                if (isPNG && c == 4)
+                {
+                    // 모든 채널을 0으로 설정 (투명화)
+                    dst->data[idx + 0] = 0;
+                    dst->data[idx + 1] = 0;
+                    dst->data[idx + 2] = 0;
+                    dst->data[idx + 3] = 0;   // 알파 = 0 (완전 투명)
+                }
+                else
+                {
+                    // JPG: 흰색으로 대체
+                    dst->data[idx + 0] = 255;
+                    dst->data[idx + 1] = 255;
+                    dst->data[idx + 2] = 255;
+
+					// 알파 채널이 없는 경우는 건드리지 않음
+                    if (c == 4) dst->data[idx + 3] = 255;
+                }
+            }
+            else
+            {
+                // 초록색이 아니면 원본 그대로 복사
+                dst->data[idx + 0] = r;
+                dst->data[idx + 1] = g;
+                dst->data[idx + 2] = b;
+				// 알파 채널이 있는 경우 복사
+                if (c == 4) dst->data[idx + 3] = src->data[idx + 3];
+            }
+        }
+    }
+
+    printf("크로마키 처리 완료 (threshold: %d)\n", threshold);
+    return dst;
+}
