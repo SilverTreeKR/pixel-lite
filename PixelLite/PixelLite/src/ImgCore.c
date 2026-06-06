@@ -522,3 +522,45 @@ Image* applyInvert(Image* src)
     printf("색상 반전 완료\n");
     return dst;
 }
+
+// 색상 강조 (R, G, B 각각 0~255 덧셈 후 클램핑)
+
+Image* applyEnhance(Image* src, int r, int g, int b)
+{
+	// 입력 이미지가 NULL인 경우
+    if (src == NULL) return NULL;
+
+	// 결과 이미지를 저장할 새로운 Image 구조체 생성
+    Image* dst = allocImage(src->width, src->height, src->channels);
+	
+    // 생성 실패 시 NULL 반환
+    if (dst == NULL) return NULL;
+
+	// 이미지 크기 및 채널 수 저장
+    int w = src->width;
+    int h = src->height;
+    int c = src->channels;
+
+	// 모든 행(높이) 순회
+    for (int y = 0; y < h; y++)
+    {
+		// 모든 열(너비) 순회
+        for (int x = 0; x < w; x++)
+        {
+			// 현재 픽셀의 시작 인덱스를 계산
+            int idx = (y * w + x) * c;
+
+			// 각 채널 값에 강조값을 더한 후 강제로 0~255 범위로 조정
+            dst->data[idx + 0] = (unsigned char)clamp(src->data[idx + 0] + r);
+            dst->data[idx + 1] = (unsigned char)clamp(src->data[idx + 1] + g);
+            dst->data[idx + 2] = (unsigned char)clamp(src->data[idx + 2] + b);
+
+            // 알파 채널 유지
+            if (c == 4)
+                dst->data[idx + 3] = src->data[idx + 3];
+        }
+    }
+
+    printf("색상 강조 완료 (R:%d G:%d B:%d)\n", r, g, b);
+    return dst;
+}
