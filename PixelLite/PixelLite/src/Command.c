@@ -72,6 +72,28 @@ void cmd_info(char* args)
     printf("==========================\n");
 }
 
+// 도움말 명령어
+void cmd_help(char* args)
+{
+    printf("===== 사용 가능한 명령어 =====\n");
+    printf("  [경로 설정]\n");
+    printf("  setImage  \"경로\"      - 이미지 파일 경로 설정\n");
+    printf("  setResult \"경로\"      - 결과물 폴더 경로 설정\n");
+    printf("  info                  - 현재 경로 정보 출력\n");
+    printf("\n");
+    printf("  [이미지 처리]\n");
+    printf("  blur                  - 평균 블러 (2x2)\n");
+    printf("  grayscale             - 흑백 변환\n");
+    printf("  invert                - 색상 반전\n");
+    printf("  chromakey [threshold] - 크로마키 (기본 threshold: 100)\n");
+    printf("  enhance R G B         - 색상 강조 (각 0~255)\n");
+    printf("\n");
+    printf("  [기타]\n");
+    printf("  help                  - 명령어 목록 출력\n");
+    printf("  exit                  - CLI 종료\n");
+    printf("==============================\n");
+}
+
 // ===================================
 // FileCore.c
 // ===================================
