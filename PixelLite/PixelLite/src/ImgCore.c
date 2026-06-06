@@ -119,3 +119,103 @@ Image* loadImage(void)
     // 로드된 이미지 반환
     return img;
 }
+
+// 이미지를 파일로 저장하는 함수
+int saveImage(Image* img, const char* prefix)
+{
+    // 저장할 이미지가 없을 경우
+    if (img == NULL)
+    {
+        printf("오류: 저장할 이미지가 없습니다.\n");
+        return 0;
+    }
+
+    // 결과물 저장 폴더가 설정되어있지 않은 경우
+    if (!isResultPathSet())
+    {
+        printf("오류: 결과물 폴더가 설정되지 않았습니다.\n");
+        printf("      UI에서 '결과물 경로' 또는 CLI에서 setResult \"경로\" 를 사용하세요.\n");
+        return 0;
+    }
+
+
+	// 결과 파일 경로를 저장할 버퍼
+    char resultPath[MAX_PATH_LEN];
+
+    // 결과 파일 전체 경로 생성
+    // 예) C:\out\ + bw_ + input.png → C:\out\bw_input.png
+	// 자세한 내용은 FileCore.c / FileCore.h 의 buildResultFilePath 함수 참조
+    buildResultFilePath(resultPath, prefix);
+
+    // 확장자 저장용 버퍼
+    char ext[16];
+
+    // 저장 경로에서 확장자 추출
+    getExtension(resultPath, ext);
+
+    // 저장 성공 여부 변수
+    int success = 0;
+
+    // PNG 파일인 경우
+    if (strcmp(ext, "png") == 0)
+    {
+		// PNG로 저장 (알파 채널 포함)
+        success = stbi_write_png(resultPath,
+            img->width,
+            img->height,
+            img->channels,
+            img->data,
+            img->width * img->channels);
+    }
+    // JPG/JPEG 파일인 경우
+    else if (strcmp(ext, "jpg") == 0 || strcmp(ext, "jpeg") == 0)
+    {
+		// JPG로 저장 (알파 채널 없음)
+        success = stbi_write_jpg(resultPath,
+            img->width,
+            img->height,
+            img->channels,
+            img->data,
+            90); // 품질 90
+    }
+    // BMP 파일인 경우
+    else if (strcmp(ext, "bmp") == 0)
+    {
+		// BMP로 저장 (알파 채널 없음)
+        success = stbi_write_bmp(resultPath,
+            img->width,
+            img->height,
+            img->channels,
+            img->data);
+    }
+    // 지원하지 않는 확장자인 경우 (svg 등)
+    else
+    {
+        // 확장자 불명확 시 PNG로 저장
+        printf("알 수 없는 확장자, PNG로 저장합니다.\n");
+
+        // PNG 저장 경로 생성
+        char pngPath[MAX_PATH_LEN];
+
+        snprintf(pngPath, MAX_PATH_LEN, "%s%s%s.png",
+            getResultPath(), prefix,
+            getImageFileName());
+
+		// PNG로 저장 (알파 채널 포함)
+        success = stbi_write_png(pngPath,
+            img->width,
+            img->height,
+            img->channels,
+            img->data,
+            img->width * img->channels);
+    }
+
+	// 저장 성공 여부 확인
+    if (success)
+        printf("저장 완료: %s\n", resultPath);
+    else
+        printf("오류: 이미지 저장 실패 → %s\n", resultPath);
+
+	// 성공 여부 반환
+    return success;
+}
