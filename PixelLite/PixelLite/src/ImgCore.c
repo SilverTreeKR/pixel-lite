@@ -27,3 +27,16 @@ int clamp(int value)
     return value;
 }
 
+// 두 색상 간의 색 거리 계산 (크로마키용)
+// 현재 픽셀의 색상과 제거할 배경색 사이의 유사도 계산
+double colorDistance(int r1, int g1, int b1,
+    int r2, int g2, int b2)
+{
+    int dr = r1 - r2; // R값 차이 계산
+	int dg = g1 - g2; // G값 차이 계산
+	int db = b1 - b2; // B값 차이 계산
+    // RGB 공간에서 유클리드 거리 계산 후 반환
+    // √(ΔR² + ΔG² + ΔB²)
+    return sqrt((double)(dr * dr + dg * dg + db * db));
+}
+
