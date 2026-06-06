@@ -336,4 +336,60 @@ Image* applyBlur(Image* src)
     return dst;
 }
 
+// ================================================
+// 흑백 변환
+// 휘도 공식: Y = 0.299R + 0.587G + 0.114B
+// -> 사람 눈에 맞춰 밝기 기여도를 조절하는 방식
+// 3차원 -> 1차원으로 채널 수 변경
+// ================================================
 
+Image * applyGrayscale(Image * src)
+{
+	// 입력 이미지가 NULL인 경우
+    if (src == NULL) return NULL;
+
+	// 결과 이미지를 저장할 새로운 Image 구조체 생성
+    Image* dst = allocImage(src->width, src->height, src->channels);
+    
+	// 생성 실패 시 NULL 반환
+    if (dst == NULL) return NULL;
+
+	// 이미지 크기 및 채널 수 저장
+    int w = src->width;
+    int h = src->height;
+    int c = src->channels;
+
+    // 모든 행(높이) 순회
+    for (int y = 0; y < h; y++)
+    {
+		// 모든 열(너비) 순회
+        for (int x = 0; x < w; x++)
+        {
+			// 현재 픽셀의 시작 인덱스를 계산
+            int idx = (y * w + x) * c;
+
+			// 원본 RGB 값 추출
+            unsigned char r = src->data[idx + 0];
+            unsigned char g = src->data[idx + 1];
+            unsigned char b = src->data[idx + 2];
+
+            // 휘도 계산
+            unsigned char gray = (unsigned char)(
+                0.299 * r + 0.587 * g + 0.114 * b
+                );
+
+			dst->data[idx + 0] = gray; // R 채널에 그레이스케일 값 저장
+			dst->data[idx + 1] = gray; // G 채널에 그레이스케일 값 저장
+			dst->data[idx + 2] = gray; // B 채널에 그레이스케일 값 저장
+
+            // 알파 채널은 건들지 말고 그대로 복사
+            if (c == 4)
+                dst->data[idx + 3] = src->data[idx + 3];
+        }
+    }
+
+    printf("흑백 변환 완료\n");
+
+    // 결과 이미지 반환
+    return dst;
+}
