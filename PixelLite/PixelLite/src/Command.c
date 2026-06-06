@@ -117,3 +117,101 @@ void cmd_setResult(char* args)
     printf("결과물 폴더 설정 완료: %s\n", args);
 }
 
+// ===================================
+// ImgCore.c
+// ===================================
+
+void cmd_blur(char* args)
+{
+    processAndSave(applyBlur, "blur_");
+}
+
+void cmd_grayscale(char* args)
+{
+    processAndSave(applyGrayscale, "bw_");
+}
+
+void cmd_invert(char* args)
+{
+    processAndSave(applyInvert, "invert_");
+}
+
+// chromakey [threshold]
+// threshold 기본값: 100
+// threshold = 어디까지 초록색으로 볼 것인지에 대한 값 80~100 권장
+// 비고 : 개발력 한계로 processAndSave 함수 적용 불가 /  threshold 인자 필요함..
+void cmd_chromakey(char* args)
+{
+    int threshold = 100; // 기본값
+    if (strlen(args) > 0)
+        sscanf(args, "%d", &threshold);
+
+    // 원본 로드 하시고
+    Image* src = loadImage();
+    // 없으면 ㅈ까
+    if (src == NULL) return;
+
+    // 크로마키 입힐거임 (원본, 임계값)
+    Image* dst = applyChromaKey(src, threshold);
+    // 이거 작동하면 나도 이젠 모른다 시부럴
+    if (dst == NULL)
+    {
+        printf("오류: 크로마키 처리 실패\n");
+        freeImage(src);
+        return;
+    }
+
+    // 저장
+    saveImage(dst, "chromakey_");
+    // 메모리 해제를 습관화 하자.
+    freeImage(src);
+    freeImage(dst);
+}
+
+// enhance R G B  (0~255)
+// 비고 : 개발력 한계로 processAndSave 함수 적용 불가 / 수정할 r g b 값 인자 필요함..
+void cmd_enhance(char* args)
+{
+    // 강조할 RGB 값 저장 변수
+    int r = 0, g = 0, b = 0;
+
+    // 사용자 입력에서 RGB값 가져오시고
+    if (sscanf(args, "%d %d %d", &r, &g, &b) != 3)
+    {
+        printf("사용법: enhance R G B\n");
+        printf("예시:   enhance 100 0 50\n");
+        printf("        R G B 범위: 0~255\n");
+        return;
+    }
+
+    // 범위 검사 (입력 받은 거에서)
+    if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255)
+    {
+        printf("오류: R G B 값은 0~255 범위여야 합니다.\n");
+        return;
+    }
+
+    // 원본 가져오시고
+    Image* src = loadImage();
+
+    // 없으면 ㅈ까
+    if (src == NULL) return;
+
+    // 색상 강조 하셔야지
+    Image* dst = applyEnhance(src, r, g, b);
+
+    // 아 제발요
+    if (dst == NULL)
+    {
+        printf("오류: 색상 강조 처리 실패\n");
+        freeImage(src);
+        return;
+    }
+
+    // 저장
+    saveImage(dst, "enhance_");
+
+    // 메모리 해제
+    freeImage(src);
+    freeImage(dst);
+}
